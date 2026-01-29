@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Editor from "@monaco-editor/react";
+
 import { arraySnippets } from "./snippets/array-snippets.js";
 import { stringSnippets } from "./snippets/string-snippets.js";
 import { mapSnippets } from "./snippets/map-snippets.js";
@@ -11,139 +12,190 @@ import { statementSnippets } from "./snippets/statement-snippets.js";
 import { iteratorsSnippets } from "./snippets/iteration-snippets.js";
 
 function App() {
-  const [code, setCode] = useState(`console.log("Hello World");`);
-  const [output, setOutput] = useState("");
+  const [code, setCode] = useState(() => localStorage.getItem('js-compiler-code') || `console.log("Hello World");`);
+  const [output, setOutput] = useState(() => localStorage.getItem('js-compiler-output') || "");
+  const [editorWidth, setEditorWidth] = useState(50);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const containerRef = useRef(null);
+  const isDragging = useRef(false);
+
+  // Detect screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+
   function handleEditorDidMount(editor, monaco) {
-    // Define VS Code Dark Modern theme
-    monaco.editor.defineTheme('vscode-dark-modern', {
-      base: 'vs-dark',
+    monaco.editor.defineTheme("vscode-dark-modern", {
+      base: "vs-dark",
       inherit: true,
       rules: [
-        { token: 'keyword', foreground: '569cd6' }, // Blue keywords (if, for, function, etc.)
-        { token: 'type', foreground: '4ec9b0' }, // Teal types
-        { token: 'string', foreground: 'ce9178' }, // Orange strings
-        { token: 'number', foreground: 'b5cea8' }, // Light green numbers
-        { token: 'comment', foreground: '6a9955' }, // Green comments
-        { token: 'variable', foreground: '9cdcfe' }, // Light blue variables
-        { token: 'function', foreground: 'dcdcaa' }, // Yellow functions
-        { token: 'delimiter.parenthesis', foreground: 'ffd700' }, // Gold parentheses
-        { token: 'delimiter.bracket', foreground: 'ffd700' }, // Gold brackets
-        { token: 'delimiter', foreground: 'ffd700' }, // Gold other delimiters
-        { token: 'operator', foreground: 'd4d4d4' } // Light operators
+        { token: "keyword", foreground: "569cd6" },
+        { token: "string", foreground: "ce9178" },
+        { token: "number", foreground: "b5cea8" },
+        { token: "comment", foreground: "6a9955" },
+        { token: "function", foreground: "dcdcaa" }
       ],
       colors: {
-        'editor.background': '#1e1e1e',
-        'editor.foreground': '#d4d4d4',
-        'editor.lineHighlightBackground': '#2d2d30',
-        'editor.selectionBackground': '#264f78',
-        'editorCursor.foreground': '#ffffff',
-        'editorWhitespace.foreground': '#404040',
-        'editorIndentGuide.background': '#404040',
-        'editorLineNumber.foreground': '#858585',
-        'editorLineNumber.activeForeground': '#c6c6c6'
+        "editor.background": "#1e1e1e",
+        "editor.foreground": "#d4d4d4"
       }
     });
 
-    // Set the theme
-    monaco.editor.setTheme('vscode-dark-modern');
+    monaco.editor.setTheme("vscode-dark-modern");
 
     monaco.languages.registerCompletionItemProvider("javascript", {
-      provideCompletionItems: () => {
-        return {
-          suggestions: [
-            ...arraySnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...stringSnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...mapSnippets.map(snippet => ({
-              ...snippet,
-              kind: snippet.label.includes('new') ? monaco.languages.CompletionItemKind.Class : monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...setSnippets.map(snippet => ({
-              ...snippet,
-              kind: snippet.label.includes('new') ? monaco.languages.CompletionItemKind.Class : monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...mathSnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Function,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...functionSnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...booleanSnippets.map(snippet => ({
-              ...snippet,
-              kind: snippet.label.includes('new') ? monaco.languages.CompletionItemKind.Class : monaco.languages.CompletionItemKind.Function,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...statementSnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Keyword,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            })),
-            ...iteratorsSnippets.map(snippet => ({
-              ...snippet,
-              kind: monaco.languages.CompletionItemKind.Method,
-              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-            }))
-          ]
-        };
-      }
+      provideCompletionItems: () => ({
+        suggestions: [
+          ...arraySnippets,
+          ...stringSnippets,
+          ...mapSnippets,
+          ...setSnippets,
+          ...mathSnippets,
+          ...functionSnippets,
+          ...booleanSnippets,
+          ...statementSnippets,
+          ...iteratorsSnippets
+        ].map(snippet => ({
+          ...snippet,
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertTextRules:
+            monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+        }))
+      })
     });
   }
-
 
   const runCode = () => {
     try {
       let logs = [];
       const oldLog = console.log;
 
-      console.log = (...args) => logs.push(args.join(" "));
+      console.log = (...args) => {
+        const formattedArgs = args.map(arg => {
+          if (typeof arg === 'string') {
+            return arg;
+          } else {
+            try {
+              return JSON.stringify(arg, null, 2);
+            } catch (e) {
+              return String(arg);
+            }
+          }
+        });
+        logs.push(formattedArgs.join(" "));
+      };
       eval(code);
       console.log = oldLog;
 
-      setOutput(logs.join("\n"));
+      const outputText = logs.join("\n");
+      setOutput(outputText);
+      localStorage.setItem('js-compiler-output', outputText);
     } catch (err) {
       setOutput("Error: " + err.message);
     }
   };
 
+  // Resize logic
+  const startDrag = () => {
+    isDragging.current = true;
+  };
+
+  const stopDrag = () => {
+    isDragging.current = false;
+  };
+
+  const onDrag = (e) => {
+    if (!isDragging.current || isMobile) return;
+    const containerWidth = containerRef.current.offsetWidth;
+    const newWidth = (e.clientX / containerWidth) * 100;
+    if (newWidth > 20 && newWidth < 80) {
+      setEditorWidth(newWidth);
+    }
+  };
+
   return (
-    <div style={{ background: "#1e1e1e", minHeight: "100vh", color: "#d4d4d4", padding: "10px" }}>
-      <h2>Javascript Compiler</h2>
+    <div
+      ref={containerRef}
+      onMouseMove={onDrag}
+      onMouseUp={stopDrag}
+      style={{
+        height: "100vh",
+        background: "#1e1e1e",
+        color: "#fff",
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
+      <h2 style={{ padding: "10px" }}>JavaScript Compiler</h2>
 
-      <Editor
-        height="300px"
-        language="javascript"
-        value={code}
-        onChange={(value) => setCode(value)}
-        onMount={handleEditorDidMount}
-        options={{
-          fontSize: 16,
-          minimap: { enabled: false },
-          suggestOnTriggerCharacters: true,
-          quickSuggestions: true
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row"
         }}
-      />
+      >
+        {/* Editor */}
+        <div
+          style={{
+            width: isMobile ? "100%" : `${editorWidth}%`,
+            height: isMobile ? "50%" : "100%"
+          }}
+        >
+          <Editor
+            height="100%"
+            language="javascript"
+            value={code}
+            onChange={(value) => {
+              setCode(value);
+              localStorage.setItem('js-compiler-code', value);
+            }}
+            onMount={handleEditorDidMount}
+            options={{
+              fontSize: 16,
+              minimap: { enabled: false },
+              automaticLayout: true
+            }}
+          />
+        </div>
 
-      <button onClick={runCode} style={{ marginTop: "10px", padding: "8px 15px" }}>
-        Run Code
-      </button>
+        {/* Divider (only desktop) */}
+        {!isMobile && (
+          <div
+            onMouseDown={startDrag}
+            style={{
+              width: "6px",
+              cursor: "col-resize",
+              background: "#333"
+            }}
+          />
+        )}
 
-      <h3>Output:</h3>
-      <pre style={{ background: "black", padding: "10px", minHeight: "100px" }}>
-        {output}
-      </pre>
+        {/* Output */}
+        <div
+          style={{
+            width: isMobile ? "100%" : `${100 - editorWidth}%`,
+            height: isMobile ? "50%" : "95.3%",
+            background: "#000",
+            padding: "10px",
+            overflow: "auto"
+          }}
+        >
+          <button onClick={runCode} style={{ marginBottom: "10px" }}>
+            ▶ Run
+          </button>
+
+          <h3>Output:</h3>
+          <pre style={{ whiteSpace: "pre-wrap" }}>{output}</pre>
+        </div>
+      </div>
     </div>
   );
 }
