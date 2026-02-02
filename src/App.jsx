@@ -10,6 +10,7 @@ import { functionSnippets } from "./snippets/function-snippets.js";
 import { booleanSnippets } from "./snippets/boolean-snippets.js";
 import { statementSnippets } from "./snippets/statement-snippets.js";
 import { iteratorsSnippets } from "./snippets/iteration-snippets.js";
+import { consoleSnippets } from "./snippets/console-snippets.js";
 
 function App() {
   const [code, setCode] = useState(() => localStorage.getItem('js-compiler-code') || `console.log("Hello World");`);
@@ -61,7 +62,8 @@ function App() {
           ...functionSnippets,
           ...booleanSnippets,
           ...statementSnippets,
-          ...iteratorsSnippets
+          ...iteratorsSnippets,
+          ...consoleSnippets
         ].map(snippet => ({
           ...snippet,
           kind: monaco.languages.CompletionItemKind.Snippet,
