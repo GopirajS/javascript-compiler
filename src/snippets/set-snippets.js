@@ -1,6 +1,8 @@
+// setSnippets.js
+
 export const setSnippets = [
   {
-    label: "new Set()",
+    label: "Set()",
     insertText: "new Set()"
   },
   {

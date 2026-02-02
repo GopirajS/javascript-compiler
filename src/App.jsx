@@ -11,6 +11,7 @@ import { booleanSnippets } from "./snippets/boolean-snippets.js";
 import { statementSnippets } from "./snippets/statement-snippets.js";
 import { iteratorsSnippets } from "./snippets/iteration-snippets.js";
 import { consoleSnippets } from "./snippets/console-snippets.js";
+import * as helpers from "./snippets/helpers.js";
 
 function App() {
   const [code, setCode] = useState(() => localStorage.getItem('js-compiler-code') || `console.log("Hello World");`);
@@ -93,7 +94,19 @@ function App() {
         });
         logs.push(formattedArgs.join(" "));
       };
+
+      // Inject helper functions into global scope
+      const helperKeys = Object.keys(helpers);
+      helperKeys.forEach(key => {
+        window[key] = helpers[key];
+      });
+
       eval(code);
+
+      // Clean up
+      helperKeys.forEach(key => {
+        delete window[key];
+      });
       console.log = oldLog;
 
       const outputText = logs.join("\n");

@@ -1,62 +1,62 @@
 export const stringSnippets = [
   {
-    label: "charAt()",
-    insertText: "charAt(${1:index})"
+    label: "str.charAt()",
+    insertText: "str.charAt(${1:index})"
   },
   {
     label: "charCodeAt()",
-    insertText: "charCodeAt(${1:index})"
+    insertText: "str.charCodeAt(${1:index})"
   },
   {
     label: "startsWith()",
-    insertText: "startsWith(${1:value})"
+    insertText: "str.startsWith(${1:value})"
   },
   {
     label: "endsWith()",
-    insertText: "endsWith(${1:value})"
+    insertText: "str.endsWith(${1:value})"
   },
   {
     label: "padStart()",
-    insertText: "padStart(${1:length}, ${2:char})"
+    insertText: "str.padStart(${1:length}, ${2:char})"
   },
   {
     label: "padEnd()",
-    insertText: "padEnd(${1:length}, ${2:char})"
+    insertText: "str.padEnd(${1:length}, ${2:char})"
   },
   {
     label: "repeat()",
-    insertText: "repeat(${1:count})"
+    insertText: "str.repeat(${1:count})"
   },
   {
     label: "match()",
-    insertText: "match(${1:regex})"
+    insertText: "str.match(${1:regex})"
   },
   {
     label: "search()",
-    insertText: "search(${1:regex})"
+    insertText: "str.search(${1:regex})"
   },
   {
     label: "split()",
-    insertText: "split(${1:separator})"
+    insertText: "str.split(${1:separator})"
   },
   {
     label: "replace()",
-    insertText: "replace(${1:pattern}, ${2:replacement})"
+    insertText: "str.replace(${1:pattern}, ${2:replacement})"
   },
   {
     label: "substring()",
-    insertText: "substring(${1:start}, ${2:end})"
+    insertText: "str.substring(${1:start}, ${2:end})"
   },
   {
     label: "toUpperCase()",
-    insertText: "toUpperCase()"
+    insertText: "str.toUpperCase()"
   },
   {
     label: "toLowerCase()",
-    insertText: "toLowerCase()"
+    insertText: "str.toLowerCase()"
   },
   {
     label: "trim()",
-    insertText: "trim()"
+    insertText: "str.trim()"
   }
 ];
