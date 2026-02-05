@@ -9,11 +9,11 @@ export const mathSnippets = [
   },
   {
     label: "Math.max()",
-    insertText: "Math.max(${1:a}, ${2:b})"
+    insertText: "Math.max(${1:number1}, ${2:number2}, ...)"
   },
   {
     label: "Math.min()",
-    insertText: "Math.min(${1:a}, ${2:b})"
+    insertText: "Math.min(${1:number1}, ${2:number2}, ...)"
   },
   {
     label: "Math.sqrt()",
@@ -21,7 +21,7 @@ export const mathSnippets = [
   },
   {
     label: "Math.pow()",
-    insertText: "Math.pow(${1:x}, ${2:y})"
+    insertText: "Math.pow(${1:number}, ${2:power})"
   },
   {
     label: "Math.trunc()",

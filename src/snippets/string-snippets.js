@@ -4,59 +4,83 @@ export const stringSnippets = [
     insertText: "str.charAt(${1:index})"
   },
   {
-    label: "charCodeAt()",
+    label: "str.charCodeAt()",
     insertText: "str.charCodeAt(${1:index})"
   },
   {
-    label: "startsWith()",
+    label: "str.startsWith()",
     insertText: "str.startsWith(${1:value})"
   },
   {
-    label: "endsWith()",
+    label: "str.endsWith()",
     insertText: "str.endsWith(${1:value})"
   },
   {
-    label: "padStart()",
+    label: "str.padStart()",
     insertText: "str.padStart(${1:length}, ${2:char})"
   },
   {
-    label: "padEnd()",
+    label: "str.padEnd()",
     insertText: "str.padEnd(${1:length}, ${2:char})"
   },
   {
-    label: "repeat()",
+    label: "str.repeat()",
     insertText: "str.repeat(${1:count})"
   },
   {
-    label: "match()",
+    label: "str.match()",
     insertText: "str.match(${1:regex})"
   },
   {
-    label: "search()",
+    label: "str.search()",
     insertText: "str.search(${1:regex})"
   },
   {
-    label: "split()",
+    label: "str.split()",
     insertText: "str.split(${1:separator})"
   },
   {
-    label: "replace()",
+    label: "str.replace()",
     insertText: "str.replace(${1:pattern}, ${2:replacement})"
   },
   {
-    label: "substring()",
-    insertText: "str.substring(${1:start}, ${2:end})"
+    label: "str.replaceAll()",
+    insertText: "str.replaceAll(' ', '')"
   },
   {
-    label: "toUpperCase()",
+    label: "str.substring()",
+    insertText: "str.substring(${1:startIndex}, ${2:endIndex})"
+  },
+  {
+    label: "str.toUpperCase()",
     insertText: "str.toUpperCase()"
   },
   {
-    label: "toLowerCase()",
+    label: "str.toLowerCase()",
     insertText: "str.toLowerCase()"
   },
   {
-    label: "trim()",
+    label: "str.trim()",
     insertText: "str.trim()"
+  },
+  {
+    label: "str.includes()",
+    insertText: "str.includes(${1:searchString})"
+  },
+  {
+    label: "str.indexOf()",
+    insertText: "str.indexOf(${1:searchString})"
+  },
+  {
+    label: "str.lastIndexOf()",
+    insertText: "str.lastIndexOf(${1:searchString})"
+  },
+  {
+    label: "str.slice()",
+    insertText: "str.slice(${1:start}, ${2:end})"
+  },
+  {
+    label: "str.concat()",
+    insertText: "str.concat(${1:str2}, ${2:str3})"
   }
 ];

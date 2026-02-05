@@ -4,27 +4,27 @@ export const mapSnippets = [
     insertText: "new Map()"
   },
   {
-    label: "set()",
-    insertText: "set(${1:key}, ${2:value})"
+    label: "map.set()",
+    insertText: "map.set(${1:key}, ${2:value})"
   },
   {
-    label: "get()",
-    insertText: "get(${1:key})"
+    label: "map.get()",
+    insertText: "map.get(${1:key})"
   },
   {
-    label: "has()",
-    insertText: "has(${1:key})"
+    label: "map.has()",
+    insertText: "map.has(${1:key})"
   },
   {
-    label: "clear()",
-    insertText: "clear()"
+    label: "map.clear()",
+    insertText: "map.clear()"
   },
   {
-    label: "delete()",
-    insertText: "delete(${1:key})"
+    label: "map.delete()",
+    insertText: "map.delete(${1:key})"
   },
   {
-    label: "groupBy()",
-    insertText: "groupBy(${1:fn})"
+    label: "map.groupBy()",
+    insertText: "map.groupBy(${1:fn})"
   }
 ];

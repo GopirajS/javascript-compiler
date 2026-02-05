@@ -6,23 +6,23 @@ export const setSnippets = [
     insertText: "new Set()"
   },
   {
-    label: "add()",
-    insertText: "add(${1:value})"
+    label: "set.add()",
+    insertText: "set.add(${1:value})"
   },
   {
-    label: "union()",
-    insertText: "union(${1:set})"
+    label: "set.union()",
+    insertText: "set.union(${1:set})"
   },
   {
-    label: "intersection()",
-    insertText: "intersection(${1:set})"
+    label: "set.intersection()",
+    insertText: "set.intersection(${1:set})"
   },
   {
-    label: "difference()",
-    insertText: "difference(${1:set})"
+    label: "set.difference()",
+    insertText: "set.difference(${1:set})"
   },
   {
-    label: "symmetricDifference()",
-    insertText: "symmetricDifference(${1:set})"
+    label: "set.symmetricDifference()",
+    insertText: "set.symmetricDifference(${1:set})"
   }
 ];
