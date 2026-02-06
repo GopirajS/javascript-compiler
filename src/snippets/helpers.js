@@ -4,73 +4,52 @@ export function getType(value) {
   return Object.prototype.toString.call(value).slice(8, -1);
 }
 
-export function isArray(value) {
-  return Array.isArray(value);
-}
-
-export function isObject(value) {
-  return getType(value) === 'Object';
-}
-
-export function isEmpty(value) {
-  if (value === null || value === undefined) return true;
-  if (typeof value === 'string') return value.trim() === '';
-  if (Array.isArray(value)) return value.length === 0;
-  if (typeof value === 'object') return Object.keys(value).length === 0;
-  return false;
-}
-
-export function cloneDeep(value) {
-  return JSON.parse(JSON.stringify(value));
-}
-
-export function debounce(fn, delay) {
-  let timeoutId;
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-export function throttle(fn, limit) {
-  let inThrottle;
-  return function (...args) {
-    if (!inThrottle) {
-      fn.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+export function debug(...values) {
+  console.log('---');
+  values.forEach((value, index) => {
+    const type = getType(value);
+    
+    console.log(`[${index + 1}] Type: ${type}`);
+    
+    switch (type) {
+      case 'Object':
+        console.log('Value:', value);
+        console.log('Keys:', Object.keys(value));
+        break;
+      case 'Array':
+        console.log('Value:', value);
+        console.log('Length:', value.length);
+        break;
+      case 'Map':
+        console.log('Value:');
+        value.forEach((val, key) => {
+          console.log(`  ${key}: ${val}`);
+        });
+        break;
+      case 'Set':
+        console.log('Value:');
+        value.forEach(val => {
+          console.log(`  ${val}`);
+        });
+        break;
+      case 'Null':
+        console.log('Value:', null);
+        break;
+      case 'Undefined':
+        console.log('Value:', undefined);
+        break;
+      case 'Function':
+      case 'AsyncFunction':
+      case 'GeneratorFunction':
+        console.log('Value:', value.toString());
+        break;
+      case 'Error':
+        console.log('Message:', value.message);
+        console.log('Stack:', value.stack);
+        break;
+      default:
+        console.log('Value:', value);
     }
-  };
-}
-
-export function uniqueArray(arr) {
-  return [...new Set(arr)];
-}
-
-export function shuffleArray(arr) {
-  return arr.sort(() => Math.random() - 0.5);
-}
-
-export function chunkArray(arr, size) {
-  const chunks = [];
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size));
-  }
-  return chunks;
-}
-
-export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export function truncate(str, length) {
-  return str.length > length ? str.slice(0, length) + '...' : str;
-}
-
-export function formatDate(date) {
-  return new Date(date).toLocaleDateString();
-}
-
-export function formatNumber(num) {
-  return new Intl.NumberFormat().format(num);
+    console.log('---');
+  });
 }

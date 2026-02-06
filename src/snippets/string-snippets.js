@@ -82,5 +82,49 @@ export const stringSnippets = [
   {
     label: "str.concat()",
     insertText: "str.concat(${1:str2}, ${2:str3})"
+  },
+  {
+    label: "str.codePointAt()",
+    insertText: "str.codePointAt(${1:index})"
+  },
+  {
+    label: "str.localeCompare()",
+    insertText: "str.localeCompare(${1:compareString})"
+  },
+  {
+    label: "str.matchAll()",
+    insertText: "str.matchAll(${1:regex})"
+  },
+  {
+    label: "str.normalize()",
+    insertText: "str.normalize(${1:form})"
+  },
+  {
+    label: "str.valueOf()",
+    insertText: "str.valueOf()"
+  },
+  {
+    label: "str.toLocaleUpperCase()",
+    insertText: "str.toLocaleUpperCase()"
+  },
+  {
+    label: "str.toLocaleLowerCase()",
+    insertText: "str.toLocaleLowerCase()"
+  },
+  {
+    label: "str.trimStart()",
+    insertText: "str.trimStart()"
+  },
+  {
+    label: "str.trimEnd()",
+    insertText: "str.trimEnd()"
+  },
+  {
+    label: "str.fromCharCode()",
+    insertText: "str.fromCharCode(${1:num1}, ${2:num2})"
+  },
+  {
+    label: "str.fromCodePoint()",
+    insertText: "str.fromCodePoint(${1:codePoint1}, ${2:codePoint2})"
   }
 ];
