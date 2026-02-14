@@ -35,7 +35,7 @@ export const arraySnippets = [
   { label: "array.slice()", insertText: "array.slice(${1:start}, ${2:end})" },
   { label: "array.some()", insertText: "array.some(item => ${1:true})" },
   { label: "array.sort()", insertText: "array.sort()" },
-  { label: "array.splice()", insertText: "array.splice(${1:start}, ${2:deleteCount})" },
+  { label: "array.splice()", insertText: "array.splice(${1:startIndex}, ${2:deleteCount}, ${3:item1}, ${4:item2}, ... )" },
   { label: "array.rest (...)", insertText: "array....${1:array}" },
   { label: "array.spread (...)", insertText: "array....${1:array}" },
   { label: "array.toReversed()", insertText: "array.toReversed()" },

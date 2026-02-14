@@ -75,24 +75,51 @@ function App() {
     });
   }
 
+  const [isRunning, setIsRunning] = useState(false);
+
   const runCode = () => {
+    if (isRunning) return; // Prevent multiple executions
+    setIsRunning(true);
+    setOutput("Running...");
+    
+    // Timeout protection - kill execution after 5 seconds
+    const timeoutId = setTimeout(() => {
+      setIsRunning(false);
+      setOutput(prev => prev + "\n⚠️ Execution timed out (5s limit). Possible infinite loop?");
+    }, 5000);
+    
     try {
       let logs = [];
-      const oldLog = console.log;
+      const originalConsole = {
+        log: console.log,
+        error: console.error,
+        warn: console.warn,
+        info: console.info
+      };
+
+      const formatArg = (arg) => {
+        if (typeof arg === 'string') {
+          return arg;
+        } else {
+          try {
+            return JSON.stringify(arg, null, 2);
+          } catch (e) {
+            return String(arg);
+          }
+        }
+      };
 
       console.log = (...args) => {
-        const formattedArgs = args.map(arg => {
-          if (typeof arg === 'string') {
-            return arg;
-          } else {
-            try {
-              return JSON.stringify(arg, null, 2);
-            } catch (e) {
-              return String(arg);
-            }
-          }
-        });
-        logs.push(formattedArgs.join(" "));
+        logs.push({ type: 'log', text: args.map(formatArg).join(" ") });
+      };
+      console.error = (...args) => {
+        logs.push({ type: 'error', text: '[ERROR] ' + args.map(formatArg).join(" ") });
+      };
+      console.warn = (...args) => {
+        logs.push({ type: 'warn', text: '[WARN] ' + args.map(formatArg).join(" ") });
+      };
+      console.info = (...args) => {
+        logs.push({ type: 'info', text: '[INFO] ' + args.map(formatArg).join(" ") });
       };
 
       // Inject helper functions into global scope
@@ -107,17 +134,28 @@ function App() {
       helperKeys.forEach(key => {
         delete window[key];
       });
-      console.log = oldLog;
+      console.log = originalConsole.log;
+      console.error = originalConsole.error;
+      console.warn = originalConsole.warn;
+      console.info = originalConsole.info;
+      
+      clearTimeout(timeoutId);
+      setIsRunning(false);
 
-      const outputText = logs.join("\n");
+      const outputText = logs.map(log => log.text).join("\n");
       setOutput(outputText);
       localStorage.setItem('js-compiler-output', outputText);
     } catch (err) {
+      clearTimeout(timeoutId);
+      setIsRunning(false);
       setOutput("Error: " + err.message);
     }
   };
 
-  // Resize logic
+  const clearOutput = () => {
+    setOutput("");
+    localStorage.setItem('js-compiler-output', '');
+  };
   const startDrag = () => {
     isDragging.current = true;
   };
@@ -203,12 +241,36 @@ function App() {
             overflow: "auto"
           }}
         >
-          <button onClick={runCode} style={{ marginBottom: "10px" }}>
-            ▶ Run
-          </button>
+          <div style={{ marginBottom: "10px", display: "flex", gap: "10px" }}>
+            <button 
+              onClick={runCode} 
+              disabled={isRunning}
+              style={{ opacity: isRunning ? 0.5 : 1 }}
+            >
+              {isRunning ? "⏳ Running..." : "▶ Run"}
+            </button>
+            <button onClick={clearOutput}>🗑️ Clear</button>
+          </div>
 
           <h3>Output:</h3>
-          <pre style={{ whiteSpace: "pre-wrap" }}>{output}</pre>
+          <pre style={{ whiteSpace: "pre-wrap" }}>
+            {output.split('\n').map((line, i) => {
+              // Check for different output types
+              if (line.startsWith('[ERROR]')) {
+                return <div key={i} style={{ color: '#ff6b6b' }}>{line.replace('[ERROR]', '')}</div>;
+              }
+              if (line.startsWith('[WARN]')) {
+                return <div key={i} style={{ color: '#ffd93d' }}>{line.replace('[WARN]', '')}</div>;
+              }
+              if (line.startsWith('[INFO]')) {
+                return <div key={i} style={{ color: '#6bcfff' }}>{line.replace('[INFO]', '')}</div>;
+              }
+              if (line.startsWith('Error:') || line.includes('timed out')) {
+                return <div key={i} style={{ color: '#ff6b6b' }}>{line}</div>;
+              }
+              return <div key={i}>{line}</div>;
+            })}
+          </pre>
         </div>
       </div>
     </div>
